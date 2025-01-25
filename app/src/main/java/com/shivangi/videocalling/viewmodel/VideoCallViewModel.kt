@@ -1,27 +1,13 @@
 package com.shivangi.videocalling.viewmodel
 
 import androidx.lifecycle.ViewModel
-import org.jitsi.meet.sdk.JitsiMeet
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
-import java.net.URL
+import com.shivangi.videocalling.repository.JitsiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class VideoCallViewModel : ViewModel() {
-
-    init {
-        // Initialize Jitsi Meet Server
-        val serverURL = URL("https://meet.jit.si")
-        val defaultOptions = JitsiMeetConferenceOptions.Builder()
-            .setServerURL(serverURL)
-            .setWelcomePageEnabled(false)
-            .build()
-        JitsiMeet.setDefaultConferenceOptions(defaultOptions)
-    }
-
-    fun getConferenceOptions(meetingID: String): JitsiMeetConferenceOptions {
-        return JitsiMeetConferenceOptions.Builder()
-            .setRoom(meetingID)
-            .setFeatureFlag("invite.enabled", false) // Disable invite option
-            .setFeatureFlag("add-people.enabled", false)
-            .build()
+@HiltViewModel
+class VideoCallViewModel @Inject constructor(private val repository: JitsiRepository) : ViewModel() {
+    fun startMeeting(meetingName: String) {
+        repository.startMeeting(meetingName)
     }
 }

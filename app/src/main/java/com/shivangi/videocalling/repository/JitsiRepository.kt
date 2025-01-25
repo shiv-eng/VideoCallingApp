@@ -1,29 +1,22 @@
 package com.shivangi.videocalling.repository
 
 import android.content.Context
-import org.jitsi.meet.sdk.JitsiMeet
+import android.content.Intent
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
-import java.net.URL
+import javax.inject.Inject
 
-class JitsiRepository(context: Context) {
+class JitsiRepository @Inject constructor(private val context: Context) {
 
-    init {
-        val serverURL = URL("https://meet.jit.si")
-        val options = JitsiMeetConferenceOptions.Builder()
-            .setServerURL(serverURL)
-            .setWelcomePageEnabled(false)
-            .build()
-        JitsiMeet.setDefaultConferenceOptions(options)
-    }
-
-    fun startMeeting(context: Context, meetingName: String) {
+    fun startMeeting(meetingName: String) {
         val options = JitsiMeetConferenceOptions.Builder()
             .setRoom(meetingName)
             .setAudioMuted(false)
             .setVideoMuted(false)
             .build()
 
-        JitsiMeetActivity.launch(context, options)
+        val intent = Intent(context, JitsiMeetActivity::class.java)
+        intent.putExtra("JitsiMeetConferenceOptions", options)
+        context.startActivity(intent)
     }
 }
